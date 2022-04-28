@@ -80,7 +80,8 @@ it('Test Search With Translation',() => {
     cy.xpath('//a[@test-data="AdvancedOptions"]').click()
     cy.xpath('//select[@test-data="translateInput"]').select('en')
     cy.xpath('//button[@test-data="searchButton"]').click()
-    cy.xpath('//div[@id="search-result"]').wait(10000).children().each((element) => {
+    cy.wait(10000)
+    cy.xpath('//div[@id="search-result"]').children().each((element) => {
         cy.get(element).find('span[test-data="MatchedKeywords"]').should('contain', 'hello')
     })
 })
