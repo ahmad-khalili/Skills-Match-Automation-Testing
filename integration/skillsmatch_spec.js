@@ -76,11 +76,11 @@ it('Test Search With Sorting Enabled',() => {
 })
 it('Test Search With Translation',() => {
     cy.xpath('//a[contains(.,"Search")]').click()
-    cy.xpath('//span[@role="textbox"]').type('برمجيات{enter}')
+    cy.xpath('//span[@role="textbox"]').type('أهلا{enter}')
     cy.xpath('//a[@test-data="AdvancedOptions"]').click()
     cy.xpath('//select[@test-data="translateInput"]').select('en')
     cy.xpath('//button[@test-data="searchButton"]').click()
-    cy.xpath('//div[@id="search-result"]').children().each((element) => {
-        cy.get(element, { timeout: 10000 }).find('span[test-data="MatchedKeywords"]').should('contain', 'software')
+    cy.xpath('//div[@id="search-result"]').wait(10000).children().each((element) => {
+        cy.get(element).find('span[test-data="MatchedKeywords"]').should('contain', 'hello')
     })
 })
