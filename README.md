@@ -109,10 +109,23 @@ it('Test Search With Sorting Enabled',() => {
     cy.xpath('//a[@test-data="AdvancedOptions"]').click()
     cy.xpath('//input[@test-data="sort_by_user_reviews"]').click()
     cy.xpath('//button[@test-data="searchButton"]').click()
+    cy.wait(10000)
     cy.xpath('//div[@test-data="searchItem_1"]//child::div[@test-data="UserFeedback"]').children('.fill').then(element => {
         let currentRating = element.length
         cy.xpath('//div[@test-data="searchItem_2"]//child::div[@test-data="UserFeedback"]').children('.fill').its('length').should('be.lte', currentRating)
 ```
+## Searching With English Translation
+- In this test, we enter an Arabic keyword instead of an English one, then select the English option using the "select" method passing the "test-data" for the selection as a selector, and the option containing the value "en" inside of that selection element. Finally, we check each course's match keywords with English translation of the entered keyword
+```
+it('Test Search With Translation',() => {
+    cy.xpath('//a[contains(.,"Search")]').click()
+    cy.xpath('//span[@role="textbox"]').type('أهلا{enter}')
+    cy.xpath('//a[@test-data="AdvancedOptions"]').click()
+    cy.xpath('//select[@test-data="translateInput"]').select('en')
+    cy.xpath('//button[@test-data="searchButton"]').click()
+    cy.wait(10000)
+    cy.xpath('//div[@id="search-result"]').children().each((element) => {
+        cy.get(element).find('span[test-data="MatchedKeywords"]').should('contain', 'hello')
+```
 ## Script Demo 
-
-https://user-images.githubusercontent.com/63163965/165782858-e2deb03a-2b03-4428-8f26-45b108779507.mp4
+https://user-images.githubusercontent.com/63163965/165837145-dc2ea0a8-e497-4435-a226-e18725e7976b.mp4
