@@ -61,8 +61,6 @@ it('Test Search With All Keywords',() => {
 
 })
 it('Test Search With Case Sensitivity',() => {
-})
-it('Test Search With Sorting Enabled',() => {
     cy.xpath('//a[contains(.,"Search")]').click()
     cy.xpath('//span[@role="textbox"]').type('software{enter}')
     cy.xpath('//a[@test-data="AdvancedOptions"]').click()
@@ -72,4 +70,7 @@ it('Test Search With Sorting Enabled',() => {
         let currentRating = element.length
         cy.xpath('//div[@test-data="searchItem_2"]//child::div[@test-data="UserFeedback"]').children('.fill').its('length').should('be.lte', currentRating)
     })
+})
+it('Test Search With Sorting Enabled',() => {
+  
 })
