@@ -58,10 +58,27 @@ it('Test Normal Search',() => {
     
 })
 it('Test Search With All Keywords',() => {
-
+    cy.xpath('//a[contains(.,"Search")]').click()
+    cy.xpath('//span[@role="textbox"]').type('hello{enter}')
+    cy.xpath('//span[@role="textbox"]').type('hi{enter}')
+    cy.xpath('//a[@test-data="AdvancedOptions"]').click()
+    cy.xpath('//input[@test-data="match_all"]').click()
+    cy.xpath('//button[@test-data="searchButton"]').click()
+    cy.xpath('//div[@id="search-result"]').children().each((element) => {
+        cy.get(element).find('span[test-data="MatchedKeywords"]').should('contain', 'hello').and('contain', 'hi')
+    })
 })
 it('Test Search With Case Sensitivity',() => {
 })
 it('Test Search With Sorting Enabled',() => {
-
+    cy.xpath('//a[contains(.,"Search")]').click()
+    cy.xpath('//span[@role="textbox"]').type('software{enter}')
+    cy.xpath('//a[@test-data="AdvancedOptions"]').click()
+    cy.xpath('//input[@test-data="sort_by_user_reviews"]').click()
+    cy.xpath('//button[@test-data="searchButton"]').click()
+    cy.wait(10000)
+    cy.xpath('//div[@test-data="searchItem_1"]//child::div[@test-data="UserFeedback"]').children('.fill').then(element => {
+        let currentRating = element.length
+        cy.xpath('//div[@test-data="searchItem_2"]//child::div[@test-data="UserFeedback"]').children('.fill').its('length').should('be.lte', currentRating)
+    })
 })
