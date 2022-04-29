@@ -1,4 +1,5 @@
 # Report
+In this report, we've explained every required test case in its own section. The script from the test can be found in the "integration" directory. The video demo of the script can be found at the end of the report. Also the test cases for each test can be found in the "Test Cases" directory in a ".pdf" file format.
 ## Logging In Precondition
 - Before starting each test case, we visited the website and logged in to our testing account to be able to access inner features.
 ```ruby
