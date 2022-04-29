@@ -55,7 +55,18 @@ it('Test Update My Skills', () => {
     }
 })
 it('Test Normal Search',() => {
-    
+    cy.xpath('//a[contains(.,"Search")]').click()
+    cy.xpath('//span[@role="textbox"]').type('hello{enter}')
+    cy.xpath('//button[@test-data="searchButton"]').click()
+    cy.xpath('//div[@id="search-result"]').children().each((element) => {
+        cy.get(element).find('span[test-data="MatchedKeywords"]').should('contain', 'hello')
+        cy.get(element).find('span[test-data="TotalMatches"]').invoke('text').then(count => {
+            count = count.replace( /^\D+/g, '')
+            count = Number(count)
+            cy.get(element).find('a').click()
+            cy.xpath('//div[@class="container"]//child::div[9]').contains('hello').should('have.length', count)
+        })
+    })
 })
 it('Test Search With All Keywords',() => {
     cy.xpath('//a[contains(.,"Search")]').click()
