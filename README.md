@@ -62,20 +62,18 @@ it('Test Update My Skills', () => {
         cy.xpath('//div[contains(@test-data,"area_' + i + '_myscore")]//child::label[contains(@test-data,"filledStar")]').should('have.length', 5)
 ```
 ## Normal Searching Test
-- We navigated to the "Search" page after logging in, then selected the searchbox using its "role" attribute (the other input field that had the "test-data=keywordInput" attribute was hidden so it couldn't be used) then entered a keyword containing a small amount of results (to be able check each course's keyword count). Then, after clicking search, we used the "each" function to iterate through each "search-item" in the "search-result" div and checked if each item contained the searched keyword. Finally we opened each course and validated the count of the keyword inside of it using the "invoke" method to get the content of the total matches for each course and then extracting the number (which represents the count) with a regular expression and then using that aquired number to check for the count of that keyword inside of the course page using the "should("have.length", count)" method.
+- We navigated to the "Search" page after logging in, then selected the searchbox using its "role" attribute (the other input field that had the "test-data=keywordInput" attribute was hidden so it couldn't be used) then entered a keyword. Then we checked the first search item's matched keywords' span to check wether that keyword exists in it. Finally we opened that course's page and checked the number of occurrences for that keyword (after the description) and throwed an error if that count doesn't match the actual needed count.
 ```ruby
 it('Test Normal Search',() => {
     cy.xpath('//a[contains(.,"Search")]').click()
-    cy.xpath('//span[@role="textbox"]').type('hello{enter}')
+    cy.xpath('//span[@role="textbox"]').type('software{enter}')
     cy.xpath('//button[@test-data="searchButton"]').click()
-    cy.xpath('//div[@id="search-result"]').children().each((element) => {
-        cy.get(element).find('span[test-data="MatchedKeywords"]').should('contain', 'hello')
-        cy.get(element).find('span[test-data="TotalMatches"]').invoke('text').then(count => {
-            count = count.replace( /^\D+/g, '')
-            count = Number(count)
-            cy.log(count)
-            cy.get(element).find('a').click()
-            cy.xpath('//div[@class="container"]//child::div[9]').contains('hello').should('have.length', count)
+    cy.xpath('//div[@test-data="searchItem_1"]//child::span[@test-data="MatchedKeywords"]').should('contain', 'software')
+    cy.visit('https://skillsmatch.mdx.ac.uk/en/course/5795?keywords=software')
+    cy.xpath('//div[@class="container"]//child::div[9]').invoke('text').then(desc => {
+        var count = (desc.match(/software/g) || []).length;
+        if (count != 9){
+            throw new Error("The actual count doesn't match the keyword count")
 ```
 ## Searching With All Keywords Test
 - Instead of just searching for a single keyword, this time, we searched for two keywords while pressing enter after every word to register them as 2 seperate keywords.Then, We selected the advanced options using its "test-data" as a selector and checked the first option also using its "test-data" selector then clicked search. Finally, we checked for both of the keywords inside each of the course's "Matched Keywords" using "should" with "and" methods (to assert 2 contains).
