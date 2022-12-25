@@ -115,7 +115,7 @@ it('Test Search With Sorting Enabled',() => {
 ```
 ## Searching With English Translation
 - In this test, we enter an Arabic keyword instead of an English one, then select the English option using the "select" method passing the "test-data" for the selection as a selector, and the option containing the value "en" inside of that selection element. Finally, we check each course's match keywords with English translation of the entered keyword
-```
+```ruby
 it('Test Search With Translation',() => {
     cy.xpath('//a[contains(.,"Search")]').click()
     cy.xpath('//span[@role="textbox"]').type('أهلا{enter}')
